@@ -31,7 +31,7 @@ jobs:
         run: pack config default-builder 'paketobuildpacks/builder:tiny'
       - name: Build app with pack CLI & publish to GitHub Container Registry
         run: |
-          pack build ghcr.io/sudobarre/blogpost-backend
+          pack build ghcr.io/sudobarre/blogpost-backend:latest \
               --builder paketobuildpacks/builder:tiny \
               --buildpack paketo-buildpacks/java-native-image@5.12.0 \
               --path . \
