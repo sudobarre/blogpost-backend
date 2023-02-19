@@ -62,6 +62,7 @@ jobs:
           --env "MAIL_USERNAME=${{ env.MAIL_USERNAME }}" \
           --env "MAIL_PASSWORD=${{ env.MAIL_PASSWORD }}" \
           --env "MAIL_HOST=${{ env.MAIL_HOST }}" \
+          --env "JAVA_HOME=/home/fede/.sdkman/candidates/java/current" \
               --cache-image ghcr.io/sudobarre/blogpost-backend-paketo-cache-image:latest \
               --publish
       - name: Install flyctl via https://github.com/superfly/flyctl-actions
