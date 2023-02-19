@@ -36,7 +36,7 @@ jobs:
         run: |
           pack build ghcr.io/sudobarre/blogpost-backend:latest \
               --builder paketobuildpacks/builder:tiny \
-              --buildpack paketo-buildpacks/java-native-image@latest \
+              --buildpack paketo-buildpacks/java-native-image@7.45.0 \
               --path . \
               --env "BP_JVM_VERSION=17" \
               --env "BP_NATIVE_IMAGE=true" \
