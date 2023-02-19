@@ -36,7 +36,7 @@ jobs:
         run: |
           pack build ghcr.io/sudobarre/blogpost-backend:latest \
               --builder paketobuildpacks/builder:tiny \
-              --buildpack paketo-buildpacks/java-native-image@5.12.0 \
+              --buildpack paketo-buildpacks/java-native-image@latest \
               --path . \
               --env "BP_JVM_VERSION=17" \
               --env "BP_NATIVE_IMAGE=true" \
@@ -46,5 +46,5 @@ jobs:
       - name: Install flyctl via https://github.com/superfly/flyctl-actions
         uses: superfly/flyctl-actions/setup-flyctl@master
       
-      - name: Deploy our Spring Boot app to fly.io
+      - name: Deploy Spring Boot app to fly.io
         run: flyctl deploy --image ghcr.io/sudobarre/blogpost-backend
