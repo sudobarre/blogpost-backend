@@ -49,21 +49,20 @@ jobs:
           pack build ghcr.io/sudobarre/blogpost-backend:latest \
               --builder paketobuildpacks/builder:base \
 #              --buildpack paketo-buildpacks/java-native-image \
-#              --buildpack paketo-buildpacks/oracle \
               --path . \
               --env "BP_JVM_VERSION=17" \
-#              --env "BP_NATIVE_IMAGE=true" \
-          --env "DB_HOST=${{ env.DB_HOST }}" \
-          --env "DB_NAME=${{ env.DB_NAME }}" \
-          --env "DB_USERNAME=${{ env.DB_USERNAME }}" \
-          --env "DB_PASSWORD=${{ env.DB_PASSWORD }}" \
-          --env "DB_PORT=${{ env.DB_PORT }}" \
-          --env "JWT_EXPIRATION=${{ env.JWT_EXPIRATION }}" \
-          --env "JWT_REFRESH_EXPIRATION=${{ env.JWT_REFRESH_EXPIRATION }}" \
-          --env "JWT_SECRET=${{ env.JWT_SECRET }}" \
-          --env "MAIL_USERNAME=${{ env.MAIL_USERNAME }}" \
-          --env "MAIL_PASSWORD=${{ env.MAIL_PASSWORD }}" \
-          --env "MAIL_HOST=${{ env.MAIL_HOST }}" \
+              --env "BP_NATIVE_IMAGE=true" \
+              --env "DB_HOST=${{ env.DB_HOST }}" \
+              --env "DB_NAME=${{ env.DB_NAME }}" \
+              --env "DB_USERNAME=${{ env.DB_USERNAME }}" \
+              --env "DB_PASSWORD=${{ env.DB_PASSWORD }}" \
+              --env "DB_PORT=${{ env.DB_PORT }}" \
+              --env "JWT_EXPIRATION=${{ env.JWT_EXPIRATION }}" \
+              --env "JWT_REFRESH_EXPIRATION=${{ env.JWT_REFRESH_EXPIRATION }}" \
+              --env "JWT_SECRET=${{ env.JWT_SECRET }}" \
+              --env "MAIL_USERNAME=${{ env.MAIL_USERNAME }}" \
+              --env "MAIL_PASSWORD=${{ env.MAIL_PASSWORD }}" \
+              --env "MAIL_HOST=${{ env.MAIL_HOST }}" \
               --cache-image ghcr.io/sudobarre/blogpost-backend-paketo-cache-image:latest \
               --publish
       - name: Install flyctl via https://github.com/superfly/flyctl-actions
