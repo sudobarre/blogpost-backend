@@ -1,0 +1,50 @@
+# fly.toml file generated for blogpost-backend on 2023-02-17T16:48:37-03:00
+
+app = "blogpost-backend"
+kill_signal = "SIGINT"
+kill_timeout = 5
+processes = []
+
+[build]
+  image = "ghcr.io/sudobarre/blogpost-backend"
+
+[env]
+  DB_HOST = "${{ secrets.DB_HOST }}"
+  DB_NAME = "${{ secrets.DB_NAME }}"
+  DB_USERNAME = "${{ secrets.DB_USERNAME }}"
+  DB_PASSWORD = "${{ secrets.DB_PASSWORD }}"
+  DB_PORT = "${{ secrets.DB_PORT }}"
+  JWT_EXPIRATION = "${{ secrets.JWT_EXPIRATION }}"
+  JWT_REFRESH_EXPIRATION = "${{ secrets.JWT_REFRESH_EXPIRATION }}"
+  JWT_SECRET = "${{ secrets.JWT_SECRET }}"
+  MAIL_USERNAME = "${{ secrets.MAIL_USERNAME }}"
+  MAIL_PASSWORD = "${{ secrets.MAIL_PASSWORD }}"
+  MAIL_HOST = "${{ secrets.MAIL_HOST }}"
+[experimental]
+  allowed_public_ports = []
+  auto_rollback = true
+
+[[services]]
+  http_checks = []
+  internal_port = 8080
+  processes = ["app"]
+  protocol = "tcp"
+  script_checks = []
+  [services.concurrency]
+    hard_limit = 25
+    soft_limit = 20
+    type = "connections"
+
+  [[services.ports]]
+    handlers = ["http"]
+    port = 80
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443
+
+  [[services.tcp_checks]]
+    grace_period = "1s"
+    interval = "15s"
+    restart_limit = 0
+    timeout = "2s"
