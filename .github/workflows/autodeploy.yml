@@ -44,15 +44,11 @@ jobs:
       - name: login to docker
         run: echo "${{ secrets.CR_PAT }}" | docker login ghcr.io -u sudobarre --password-stdin
 
-      - name: Set up JDK
-        uses: actions/setup-java@v1
-        with:
-          java-version: 17
       - name: Build app with pack CLI & publish to GitHub Container Registry
         run: |
           pack build ghcr.io/sudobarre/blogpost-backend:latest \
               --builder paketobuildpacks/builder:base \
-              --buildpack paketo-buildpacks/java-native-image@7.45.0 \
+              --buildpack paketo-buildpacks/java-native-image \
               --path . \
               --env "BP_JVM_VERSION=17" \
               --env "BP_NATIVE_IMAGE=true" \
