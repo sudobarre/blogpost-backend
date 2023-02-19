@@ -49,6 +49,7 @@ jobs:
           pack build ghcr.io/sudobarre/blogpost-backend:latest \
               --builder paketobuildpacks/builder:base \
               --buildpack paketo-buildpacks/java-native-image \
+              --buildpack paketo-buildpacks/oracle \
               --path . \
               --env "BP_JVM_VERSION=17" \
               --env "BP_NATIVE_IMAGE=true" \
