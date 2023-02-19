@@ -29,6 +29,7 @@ jobs:
 
       - name: Choose default-builder (one time only)
         run: pack config default-builder 'paketobuildpacks/builder:tiny'
+
       - name: Build app with pack CLI & publish to GitHub Container Registry
         run: |
           pack build ghcr.io/sudobarre/blogpost-backend:latest \
@@ -40,6 +41,7 @@ jobs:
               --env "spring.config.name=application-prod" \
               --cache-image ghcr.io/sudobarre/blogpost-backend-paketo-cache-image:latest \
               --publish
+
       - name: Install flyctl via https://github.com/superfly/flyctl-actions
         uses: superfly/flyctl-actions/setup-flyctl@master
       

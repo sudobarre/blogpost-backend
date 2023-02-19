@@ -45,6 +45,7 @@ target/
 
 
 ### env variables and stuff ###
+mvn-build.sh
 build-and-deploy.sh
 fly.toml
 src/main/resources/application-dev.properties

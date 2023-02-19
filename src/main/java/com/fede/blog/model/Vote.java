@@ -22,7 +22,7 @@ public class Vote {
     private Long voteId;
     private VoteType voteType;
     @NotNull
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "postId", referencedColumnName = "postId")
     private Post post;
     @ManyToOne(fetch = LAZY)
