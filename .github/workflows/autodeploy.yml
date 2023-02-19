@@ -49,7 +49,6 @@ jobs:
               --builder paketobuildpacks/builder:base \
               --path . \
               --env "BP_JVM_VERSION=17" \
-              --env "BP_NATIVE_IMAGE=true" \
               --env "DB_HOST=${{ env.DB_HOST }}" \
               --env "DB_NAME=${{ env.DB_NAME }}" \
               --env "DB_USERNAME=${{ env.DB_USERNAME }}" \
@@ -61,7 +60,6 @@ jobs:
               --env "MAIL_USERNAME=${{ env.MAIL_USERNAME }}" \
               --env "MAIL_PASSWORD=${{ env.MAIL_PASSWORD }}" \
               --env "MAIL_HOST=${{ env.MAIL_HOST }}" \
-              --cache-image ghcr.io/sudobarre/blogpost-backend-paketo-cache-image:latest \
               --publish
       - name: Install flyctl via https://github.com/superfly/flyctl-actions
         uses: superfly/flyctl-actions/setup-flyctl@master
