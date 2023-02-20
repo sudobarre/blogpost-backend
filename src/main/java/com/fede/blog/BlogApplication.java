@@ -45,7 +45,7 @@ public class BlogApplication {
 		};
 	}
 
-
+/*
 	@Bean
 	CommandLineRunner logSecrets() {
 		return args -> {
@@ -62,6 +62,8 @@ public class BlogApplication {
 			log.info("MAIL_HOST: {}", env.getProperty("MAIL_HOST"));
 		};
 	}
+
+ */
 
 
 }
