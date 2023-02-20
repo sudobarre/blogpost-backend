@@ -60,7 +60,6 @@ jobs:
               --env "JWT_SECRET=${{ env.JWT_SECRET }}" \
               --env "MAIL_USERNAME=${{ env.MAIL_USERNAME }}" \
               --env "MAIL_PASSWORD=${{ env.MAIL_PASSWORD }}" \
-              --env "MAIL_HOST=${{ env.MAIL_HOST }}" \
               --publish
       - name: Install flyctl via https://github.com/superfly/flyctl-actions
         uses: superfly/flyctl-actions/setup-flyctl@master
