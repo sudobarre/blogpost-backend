@@ -9,8 +9,6 @@ import com.fede.blog.repository.CommentRepository;
 import com.fede.blog.repository.PostRepository;
 import com.fede.blog.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.ocpsoft.prettytime.PrettyTime;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,8 +19,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Date;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
