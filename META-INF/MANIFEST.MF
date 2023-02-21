@@ -1,3 +1,0 @@
-Manifest-Version: 1.0
-Main-Class: com.fede.blog.BlogApplication
-Start-Class: com.fede.blog.BlogApplication
