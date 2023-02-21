@@ -1,2 +1,2 @@
 Manifest-Version: 1.0
-Start-Class: com.fede.blog.BlogApplication
+Main-Class: com.fede.blog.BlogApplication
