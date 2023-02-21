@@ -17,6 +17,7 @@
 		<java.version>17</java.version>
 		<repackage.classifier/>
 		<spring-native.version>0.12.2</spring-native.version>
+		<native.maven.plugin.version>0.9.17</native.maven.plugin.version>
 	</properties>
 
 	<dependencies>
@@ -121,7 +122,6 @@
 			<id>native</id>
 			<properties>
 				<repackage.classifier>exec</repackage.classifier>
-				<native-buildtools.version>0.9.20</native-buildtools.version>
 				<start-class>com.fede.blog.BlogApplication</start-class>
 			</properties>
 			<build>
@@ -129,7 +129,6 @@
 					<plugin>
 						<groupId>org.graalvm.buildtools</groupId>
 						<artifactId>native-maven-plugin</artifactId>
-						<version>${native-buildtools.version}</version>
 						<extensions>true</extensions>
 						<configuration>
 							<mainClass>com.fede.blog.BlogApplication</mainClass>
