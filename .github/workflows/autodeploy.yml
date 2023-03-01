@@ -38,6 +38,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '17'
+          distribution: adopt
 
       # COMPILE INTO NATIVE IMAGE
       - name: Build native image
