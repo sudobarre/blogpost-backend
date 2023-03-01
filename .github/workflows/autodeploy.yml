@@ -1,6 +1,8 @@
 name: autodeploy
 
-on: [push]
+on:
+  push:
+    branches: [main]
 
 jobs:
   autodeploy:
@@ -29,41 +31,34 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install pack CLI via the official buildpack Action https://github.com/buildpacks/github-actions#setup-pack-cli-action
-        uses: buildpacks/github-actions/setup-pack@v4.8.1
-
-      # Caching Paketo Build see https://stackoverflow.com/a/66598693/4964553
-      # BP_OCI_SOURCE as --env creates the GitHub Container Registry <-> Repository link (https://paketo.io/docs/buildpacks/configuration/#applying-custom-labels)
-      # BP_JVM_VERSION 17, because we use Java 17 inside our Maven build but Paketo defaults to 11
-      # Explicitly defining the java-native-image buildpack as described here https://paketo.io/docs/howto/java/#configure-the-graalvm-version
-      # to pin the GraalVM version (5.12.0 = GraalVM 21.3)
-
-      - name: Choose default-builder
-        run: pack config default-builder 'paketobuildpacks/builder:tiny'
-
       - name: login to docker
         run: echo "${{ secrets.CR_PAT }}" | docker login ghcr.io -u sudobarre --password-stdin
 
-      - name: Build app with pack CLI & publish to GitHub Container Registry
-        run: |
-          pack build ghcr.io/sudobarre/blogpost-backend:latest \
-              --builder paketobuildpacks/builder:tiny \
-              --buildpack paketo-buildpacks/java-native-image@7.26.1 \
-              --path . \
-              --env "BP_JVM_VERSION=17" \
-              --env "BP_NATIVE_IMAGE=true" \
-              --env "DB_HOST=${{ env.DB_HOST }}" \
-              --env "DB_NAME=${{ env.DB_NAME }}" \
-              --env "DB_USERNAME=${{ env.DB_USERNAME }}" \
-              --env "DB_PASSWORD=${{ env.DB_PASSWORD }}" \
-              --env "DB_PORT=${{ env.DB_PORT }}" \
-              --env "JWT_EXPIRATION=${{ env.JWT_EXPIRATION }}" \
-              --env "JWT_REFRESH_EXPIRATION=${{ env.JWT_REFRESH_EXPIRATION }}" \
-              --env "JWT_SECRET=${{ env.JWT_SECRET }}" \
-              --env "MAIL_USERNAME=${{ env.MAIL_USERNAME }}" \
-              --env "MAIL_PASSWORD=${{ env.MAIL_PASSWORD }}" \
-              --cache-image ghcr.io/sudobarre/blogpost-backend-cache-image:latest \
-              --publish
+      # COMPILE INTO NATIVE IMAGE
+      - name: Build native image
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          JWT_EXPIRATION: ${{ secrets.JWT_EXPIRATION }}
+          JWT_REFRESH_EXPIRATION: ${{ secrets.JWT_REFRESH_EXPIRATION }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+          MAIL_HOST: ${{ secrets.MAIL_HOST }}
+        run: mvn package -Pnative -DDB_HOST=${DB_HOST} -DDB_NAME=${DB_NAME} -DDB_USERNAME=${DB_USERNAME} -DDB_PASSWORD=${DB_PASSWORD} -DDB_PORT=${DB_PORT} -DJWT_EXPIRATION=${JWT_EXPIRATION} -DJWT_REFRESH_EXPIRATION=${JWT_REFRESH_EXPIRATION} -DJWT_SECRET=${JWT_SECRET} -DMAIL_USERNAME=${MAIL_USERNAME} -DMAIL_PASSWORD=${MAIL_PASSWORD} -DMAIL_HOST=${MAIL_HOST}
+
+
+      # BUILD NATIVE IMAGE USING DOCKER BUILD
+      - name: Build Docker image
+        run: docker build -t ghcr.io/sudobarre/blogpost-backend .
+
+      # PUBLISH DOCKER IMAGE TO GHCR
+      - name: Publish Docker image
+        run: docker push ghcr.io/sudobarre/blogpost-backend
+
       - name: Install flyctl via https://github.com/superfly/flyctl-actions
         uses: superfly/flyctl-actions/setup-flyctl@master
       

@@ -15,9 +15,6 @@
 	<description>Blog backend</description>
 	<properties>
 		<java.version>17</java.version>
-		<repackage.classifier/>
-		<spring-native.version>0.12.2</spring-native.version>
-		<native.maven.plugin.version>0.9.17</native.maven.plugin.version>
 	</properties>
 
 	<dependencies>
@@ -98,61 +95,54 @@
 			<artifactId>spring-boot-loader</artifactId>
 			<version>3.0.1</version>
 		</dependency>
-
 	</dependencies>
 
-
 	<build>
-		<pluginManagement>
 			<plugins>
+
 				<plugin>
 					<groupId>org.graalvm.buildtools</groupId>
 					<artifactId>native-maven-plugin</artifactId>
+					<version>0.9.20</version>
 					<configuration>
-						<!-- Mockito is not supported -->
+						<classesDirectory>${project.build.outputDirectory}</classesDirectory>
 						<skipNativeTests>true</skipNativeTests>
+						<buildArgs>
+							--no-fallback
+						</buildArgs>
+						<mainClass>com.fede.blog.BlogApplication</mainClass>
+						<metadataRepository>
+							<enabled>true</enabled>
+						</metadataRepository>
+						<requiredVersion>22.3</requiredVersion>
 					</configuration>
 				</plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
 
-	<profiles>
-		<profile>
-			<id>native</id>
-			<properties>
-				<repackage.classifier>exec</repackage.classifier>
-				<start-class>com.fede.blog.BlogApplication</start-class>
-			</properties>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.graalvm.buildtools</groupId>
-						<artifactId>native-maven-plugin</artifactId>
-						<extensions>true</extensions>
-						<configuration>
-							<mainClass>com.fede.blog.BlogApplication</mainClass>
-						</configuration>
-						<executions>
-							<execution>
-								<id>test-native</id>
-								<phase>test</phase>
-								<goals>
-									<goal>test</goal>
-								</goals>
-							</execution>
-							<execution>
-								<id>build-native</id>
-								<phase>package</phase>
-								<goals>
-									<goal>compile-no-fork</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
+
+				<plugin>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-maven-plugin</artifactId>
+							<configuration>
+
+								<excludes>
+									<exclude>
+										<groupId>org.projectlombok</groupId>
+										<artifactId>lombok</artifactId>
+									</exclude>
+								</excludes>
+
+								<image>
+									<env>
+										<BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>
+										<BP_NATIVE_IMAGE_BUILD_ARGUMENTS>--no-fallback</BP_NATIVE_IMAGE_BUILD_ARGUMENTS>
+										<BP_JVM_VERSION>17</BP_JVM_VERSION>
+									</env>
+								</image>
+							</configuration>
+
+		</plugin>
+
+			</plugins>
+	</build>
 
 </project>
