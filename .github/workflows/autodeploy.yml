@@ -40,23 +40,6 @@ jobs:
           java-version: '17'
           distribution: adopt
 
-      # COMPILE INTO NATIVE IMAGE
-      - name: Build native image
-        env:
-          DB_HOST: ${{ secrets.DB_HOST }}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_USERNAME: ${{ secrets.DB_USERNAME }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DB_PORT: ${{ secrets.DB_PORT }}
-          JWT_EXPIRATION: ${{ secrets.JWT_EXPIRATION }}
-          JWT_REFRESH_EXPIRATION: ${{ secrets.JWT_REFRESH_EXPIRATION }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
-          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
-          MAIL_HOST: ${{ secrets.MAIL_HOST }}
-        run: mvn package -Pnative -DDB_HOST=${DB_HOST} -DDB_NAME=${DB_NAME} -DDB_USERNAME=${DB_USERNAME} -DDB_PASSWORD=${DB_PASSWORD} -DDB_PORT=${DB_PORT} -DJWT_EXPIRATION=${JWT_EXPIRATION} -DJWT_REFRESH_EXPIRATION=${JWT_REFRESH_EXPIRATION} -DJWT_SECRET=${JWT_SECRET} -DMAIL_USERNAME=${MAIL_USERNAME} -DMAIL_PASSWORD=${MAIL_PASSWORD} -DMAIL_HOST=${MAIL_HOST} -Dmaven.compiler.release=17
-
-
 
       # BUILD NATIVE IMAGE USING DOCKER BUILD
       - name: Build Docker image
