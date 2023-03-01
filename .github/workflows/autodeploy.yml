@@ -41,13 +41,27 @@ jobs:
           distribution: adopt
 
 
-      # BUILD NATIVE IMAGE USING DOCKER BUILD
-      - name: Build Docker image
-        run: docker build -t ghcr.io/sudobarre/blogpost-backend .
 
-      # PUBLISH DOCKER IMAGE TO GHCR
-      - name: Publish Docker image
-        run: docker push ghcr.io/sudobarre/blogpost-backend
+
+      # BUILD NATIVE IMAGE USING DOCKER BUILD
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+            context: ./
+            push: true
+            tags: ghcr.io/${{ github.repository }}/blogpost-backend:latest
+            build_args: |
+              DB_HOST=${{ secrets.DB_HOST }}
+              DB_NAME=${{ secrets.DB_NAME }}
+              DB_USERNAME=${{ secrets.DB_USERNAME }}
+              DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+              DB_PORT=${{ secrets.DB_PORT }}
+              JWT_EXPIRATION=${{ secrets.JWT_EXPIRATION }}
+              JWT_REFRESH_EXPIRATION=${{ secrets.JWT_REFRESH_EXPIRATION }}
+              JWT_SECRET=${{ secrets.JWT_SECRET }}
+              MAIL_USERNAME=${{ secrets.MAIL_USERNAME }}
+              MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}
+              MAIL_HOST=${{ secrets.MAIL_HOST }}
 
       - name: Install flyctl via https://github.com/superfly/flyctl-actions
         uses: superfly/flyctl-actions/setup-flyctl@master
