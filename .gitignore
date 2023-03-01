@@ -45,7 +45,6 @@ target/
 
 
 ### env variables and stuff ###
-!target/blog
 mvn-build.sh
 build-and-publish.sh
 src/main/resources/application-dev.properties
