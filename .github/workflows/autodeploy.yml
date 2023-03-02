@@ -29,13 +29,6 @@ jobs:
           java-version: '17'
           components: 'native-image'
           github-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Example step
-        run: |
-          echo "GRAALVM_HOME: $GRAALVM_HOME"
-          echo "JAVA_HOME: $JAVA_HOME"
-          java --version
-          gu --version
-          native-image --version
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
@@ -100,6 +93,3 @@ jobs:
               MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}
               MAIL_HOST=${{ secrets.MAIL_HOST }}
 
-      
-      - name: Deploy Spring Boot app to fly.io
-        run: flyctl deploy --image ghcr.io/sudobarre/blogpost-backend
