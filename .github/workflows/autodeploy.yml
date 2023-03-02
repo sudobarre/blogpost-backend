@@ -34,11 +34,12 @@ jobs:
       - name: login to docker
         run: echo "${{ secrets.CR_PAT }}" | docker login ghcr.io -u sudobarre --password-stdin
 
-      - name: Set up JDK 17
+      - name: Set up GraalVM 22.3
         uses: actions/setup-java@v2
         with:
-          java-version: '17'
-          distribution: adopt
+          java-version: 'java-17-graalvm-22.3.0'
+          distribution: 'graalvm'
+
 
       - name: Install flyctl via https://github.com/superfly/flyctl-actions
         uses: superfly/flyctl-actions/setup-flyctl@master
