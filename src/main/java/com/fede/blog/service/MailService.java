@@ -19,26 +19,6 @@ public class MailService {
     private final JavaMailSender mailSender;
     private final String sender;
 
-    /*
-    @Async
-    void sendMail(NotificationEmail notificationEmail) {
-        MimeMessagePreparator messagePreparator = mimeMessage -> {
-            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
-            messageHelper.setFrom("blog@email.com");
-            messageHelper.setTo(notificationEmail.getRecipient());
-            messageHelper.setSubject(notificationEmail.getSubject());
-            messageHelper.setText(notificationEmail.getBody());
-        };
-        try {
-            mailSender.send(messagePreparator);
-            log.info("Activation email sent!!");
-        } catch (MailException e) {
-            log.error("Exception occurred when sending mail", e);
-            throw new BlogException("Exception occurred when sending mail to " + notificationEmail.getRecipient(), e);
-        }
-    }
-
-     */
     @Async
     void sendMail(NotificationEmail notificationEmail) {
         SimpleMailMessage mailMessage

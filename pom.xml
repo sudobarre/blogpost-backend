@@ -14,6 +14,9 @@
 	<name>blog</name>
 	<description>Blog backend</description>
 	<properties>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>17</java.version>
 	</properties>
 
@@ -71,10 +74,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-thymeleaf</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.ocpsoft.prettytime</groupId>
 			<artifactId>prettytime</artifactId>
 			<version>3.2.7.Final</version>
@@ -116,7 +115,7 @@
 						<classesDirectory>${project.build.outputDirectory}</classesDirectory>
 						<skipNativeTests>true</skipNativeTests>
 						<buildArgs>
-							--no-fallback
+							<arg>--no-fallback</arg>
 						</buildArgs>
 						<mainClass>com.fede.blog.BlogApplication</mainClass>
 						<metadataRepository>
@@ -131,7 +130,6 @@
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-maven-plugin</artifactId>
 							<configuration>
-
 								<excludes>
 									<exclude>
 										<groupId>org.projectlombok</groupId>

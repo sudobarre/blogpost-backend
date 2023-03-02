@@ -53,9 +53,7 @@ public class AuthService {
     private final MailService mailService;
     private final AuthenticationManager authenticationManager;
     private final RefreshTokenService refreshTokenService;
-    private final RefreshTokenRepository refreshTokenRepository;
     private final RoleRepository roleRepository;
-    private final UserDetailsServiceImpl userDetailsService;
 
     static final String accountVerificationUri = "/api/v1/auth/accountVerification/";
     static final String passwordChangeUrl = "api/v1/auth/accountVerification/";
@@ -79,8 +77,8 @@ public class AuthService {
         user.setCreated(Instant.now());
         user.setEnabled(false);
 
-        Set<String> strRoles = signupRequest.getRole();
-        Set<Role> roles = new HashSet<>();
+        List<String> strRoles = signupRequest.getRole();
+        List<Role> roles = new ArrayList<>();
 
 
         if (strRoles == null) {
