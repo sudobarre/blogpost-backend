@@ -49,8 +49,10 @@ jobs:
         run: |
             flyctl auth login --access-token $FLY_API_TOKEN
 
+      - name: Connect to fly.io DB via fly proxy
+        run: fly proxy 5432 -a blogpost-backend-db
 
-      # COMPILE INTO NATIVE IMAGE
+    # COMPILE INTO NATIVE IMAGE
       - name: Build native image
         env:
           DB_HOST: localhost
