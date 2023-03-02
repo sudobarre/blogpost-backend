@@ -40,16 +40,14 @@ jobs:
           java-version: '17'
           distribution: adopt
 
-      - name: Install and authenticate fly CLI
-        env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-        run: |
-          sudo curl -L https://fly.io/install.sh | sh
-          flyctl auth login --access-token $FLY_API_TOKEN
-      
+      - name: Install flyctl via https://github.com/superfly/flyctl-actions
+        uses: superfly/flyctl-actions/setup-flyctl@master
 
-      - name: Connect to fly.io DB via fly proxy
-        run: fly proxy 5432 -a blogpost-backend-db
+      - name: Authenticate fly CLI
+        env:
+            FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+        run: |
+            flyctl auth login --access-token $FLY_API_TOKEN
 
 
       # COMPILE INTO NATIVE IMAGE
