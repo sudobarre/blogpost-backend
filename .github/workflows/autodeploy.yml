@@ -50,12 +50,8 @@ jobs:
       - name: Add flyctl to PATH
         run: echo 'export PATH="$HOME/.fly/bin:$PATH"' >> $GITHUB_ENV
 
-      - name: Add flyctl to PATH
-        run: echo "::add-path::${HOME}/.fly/bin"
-
-
       - name: Connect to fly.io DB via fly proxy
-        run: fly proxy 5432 -a blogpost-backend-db
+        run: flyctl proxy 5432 -a blogpost-backend-db
 
     # COMPILE INTO NATIVE IMAGE
       - name: Build native image
