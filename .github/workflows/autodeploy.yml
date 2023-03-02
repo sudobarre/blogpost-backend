@@ -93,3 +93,6 @@ jobs:
               MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}
               MAIL_HOST=${{ secrets.MAIL_HOST }}
 
+
+      - name: Deploy Spring Boot app to fly.io
+        run: flyctl deploy --image ghcr.io/sudobarre/blogpost-backend
