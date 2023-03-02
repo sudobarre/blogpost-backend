@@ -80,7 +80,7 @@ public class AuthService {
         user.setEnabled(false);
 
         Set<String> strRoles = signupRequest.getRole();
-        Set<Role> roles = new HashSet<>();
+            ArrayList<Role> roles = new ArrayList<>();
 
 
         if (strRoles == null) {
