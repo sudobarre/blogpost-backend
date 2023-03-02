@@ -115,8 +115,6 @@
 						<classesDirectory>${project.build.outputDirectory}</classesDirectory>
 						<skipNativeTests>true</skipNativeTests>
 						<buildArgs>
-
-							<arg>-H:ReflectionConfigurationFiles=src/main/resources/META-INF/native-image/reflect-config.json</arg>
 							<arg>--no-fallback</arg>
 						</buildArgs>
 						<mainClass>com.fede.blog.BlogApplication</mainClass>
