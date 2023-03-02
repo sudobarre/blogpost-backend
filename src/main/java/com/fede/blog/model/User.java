@@ -48,7 +48,7 @@ public class User {
     @JoinTable(	name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private ArrayList<Role> roles = new ArrayList<>();
+    private List<Role> roles = new ArrayList<>();
 
     @Lob
     private String bio;
