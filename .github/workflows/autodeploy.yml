@@ -39,6 +39,7 @@ jobs:
         with:
           java-version: 'java-17-graalvm-22.3.0'
           distribution: 'graalvm'
+          graalvm-version: '22.3'
 
 
       - name: Install flyctl via https://github.com/superfly/flyctl-actions
