@@ -14,6 +14,9 @@
 	<name>blog</name>
 	<description>Blog backend</description>
 	<properties>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>17</java.version>
 	</properties>
 
@@ -116,7 +119,9 @@
 						<classesDirectory>${project.build.outputDirectory}</classesDirectory>
 						<skipNativeTests>true</skipNativeTests>
 						<buildArgs>
-							--no-fallback
+
+							<arg>-H:ReflectionConfigurationFiles=src/main/resources/META-INF/native-image/reflect-config.json</arg>
+							<arg>--no-fallback</arg>
 						</buildArgs>
 						<mainClass>com.fede.blog.BlogApplication</mainClass>
 						<metadataRepository>
@@ -131,7 +136,6 @@
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-maven-plugin</artifactId>
 							<configuration>
-
 								<excludes>
 									<exclude>
 										<groupId>org.projectlombok</groupId>
