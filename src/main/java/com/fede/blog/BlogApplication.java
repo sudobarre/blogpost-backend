@@ -28,10 +28,11 @@ public class BlogApplication {
 			if (!roleRepository.findAll().isEmpty()) {
 				BlogApplication.log.info("Skipping db roles insertion.");
 			} else {
-				log.info("Inserting roles");
+				log.info("Inserting roles...");
 				roleRepository.saveAndFlush(new Role(ROLE_USER));
 				roleRepository.saveAndFlush(new Role(ROLE_ADMIN));
 				roleRepository.saveAndFlush(new Role(ROLE_MODERATOR));
+				log.info("Roles inserted.");
 			}
 		};
 	}
