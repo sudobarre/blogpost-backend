@@ -46,14 +46,14 @@ public class CommentService {
 
         commentRepository.save(comment);
 
-        sendCommentNotification(comment.getText(), commentsDto.getCreatedDate(), post.getUser());
+        sendCommentNotification(comment.getText(), post.getUser());
     }
 
 
-    private void sendCommentNotification(String message, String date, User user) {
+    private void sendCommentNotification(String message, User user) {
         mailService.sendMail(new NotificationEmail(user.getUsername() + " commented on your post:\n",
                 user.getEmail(),
-                date + ": " + message));
+                message));
     }
 
     public List<CommentsDto> getAllCommentsFromPost(Long postId, int page, int size, String sortBy, String direction) {

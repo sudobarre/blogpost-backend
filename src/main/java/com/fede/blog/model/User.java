@@ -14,6 +14,7 @@ import org.springframework.lang.Nullable;
 import java.time.Instant;
 import java.util.*;
 
+import static jakarta.persistence.FetchType.EAGER;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -44,7 +45,7 @@ public class User {
 
     private boolean enabled;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(	name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -58,10 +59,10 @@ public class User {
     @JoinTable(name = "USER_FRIENDS", joinColumns = {
             @JoinColumn(name = "ADDING_USER", referencedColumnName = "userId", nullable =   false)}, inverseJoinColumns = {
             @JoinColumn(name = "ADDED_USER", referencedColumnName = "userId", nullable = false)})
-    @ManyToMany(fetch=LAZY)
+    @ManyToMany(fetch=EAGER)
     private Collection<User> friends;
 
-    @ManyToMany(fetch=LAZY, mappedBy = "friends")
+    @ManyToMany(fetch=EAGER, mappedBy = "friends")
     private Collection<User> addUser;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

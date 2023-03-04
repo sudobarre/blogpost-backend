@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 
-import static jakarta.persistence.FetchType.LAZY;
+import static jakarta.persistence.FetchType.EAGER;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Data
@@ -23,11 +23,11 @@ public class Comment {
     @NotEmpty
     @Column(name="body", columnDefinition="text")
     private String text;
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = EAGER, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "postId", referencedColumnName = "postId")
     private Post post;
     private Instant createdDate;
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     private User user;
     private Integer voteCount = 0;

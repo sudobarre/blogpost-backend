@@ -16,7 +16,6 @@
 	<properties>
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>17</java.version>
 	</properties>
 
@@ -94,6 +93,7 @@
 			<artifactId>spring-boot-loader</artifactId>
 			<version>3.0.1</version>
 		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -115,6 +115,11 @@
 						<classesDirectory>${project.build.outputDirectory}</classesDirectory>
 						<skipNativeTests>true</skipNativeTests>
 						<buildArgs>
+							<arg>--allow-incomplete-classpath</arg>
+							<arg>--trace-object-instantiation=java.util.jar.JarFile</arg>
+							<!--
+							<arg>-initialize-at-run-time=</arg>
+							-->
 							<arg>--no-fallback</arg>
 						</buildArgs>
 						<mainClass>com.fede.blog.BlogApplication</mainClass>

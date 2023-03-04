@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import java.time.Instant;
 import java.util.List;
 
+import static jakarta.persistence.FetchType.EAGER;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -28,10 +29,10 @@ public class Forum {
     private String name;
     @Column(columnDefinition = "varchar(255) default ''")
     private String description;
-    @OneToMany(fetch = LAZY)
+    @OneToMany(fetch = EAGER)
     private List<Post> posts;
     private Instant createdDate;
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     private User user;
     //followerCount works the same as voting on comments/posts.

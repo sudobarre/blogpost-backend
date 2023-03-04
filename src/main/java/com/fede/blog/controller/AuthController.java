@@ -7,6 +7,7 @@ import com.fede.blog.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,30 +20,31 @@ import static org.springframework.http.HttpStatus.OK;
 public class AuthController {
     private final AuthService authService;
 
-    @PostMapping("/signup")
+    @PostMapping(value="/signup", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> signup(@Valid @RequestBody SignupRequest signupRequest, HttpServletRequest request) {
         return authService.signup(signupRequest, request);
 
     }
 
-    @GetMapping("accountVerification/{token}")
+    @GetMapping(value="accountVerification/{token}")
     public ResponseEntity<String> verifyAccount(@PathVariable(name = "token") String token) {
         authService.verifyAccount(token);
         //too lazy to create a nice template for the account activation
         return new ResponseEntity<>("Account activated successfully! Please close this window and log in with your registered username.", OK);
     }
 
-    @PostMapping("/login")
+    @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
         return authService.login(loginRequest);
     }
 
-    @PostMapping("/refreshtoken")
+    @PostMapping(value="/refreshtoken", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> refreshToken(HttpServletRequest request) {
         return authService.refreshToken(request);
     }
 
-    @PostMapping("/logout")
+    @PostMapping(value="/logout", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> logout() {
         return authService.logout();
     }
