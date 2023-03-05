@@ -52,7 +52,7 @@ public class CommentService {
 
     private void sendCommentNotification(String message, User user) {
         mailService.sendMail(new NotificationEmail(user.getUsername() + " commented on your post:\n",
-                user.getEmail(),
+                "Someone commented on your post!",
                 message));
     }
 
