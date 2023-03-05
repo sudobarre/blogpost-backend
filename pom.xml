@@ -41,10 +41,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+		<!--
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
+		-->
 
 		<dependency>
 			<groupId>org.postgresql</groupId>
@@ -77,11 +79,13 @@
 			<artifactId>prettytime</artifactId>
 			<version>3.2.7.Final</version>
 		</dependency>
+		<!--
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>2.0.2</version>
 		</dependency>
+		-->
 		<dependency>
 			<groupId>javax.xml.bind</groupId>
 			<artifactId>jaxb-api</artifactId>
@@ -93,6 +97,7 @@
 			<artifactId>spring-boot-loader</artifactId>
 			<version>3.0.1</version>
 		</dependency>
+
 
 	</dependencies>
 
@@ -115,7 +120,6 @@
 						<classesDirectory>${project.build.outputDirectory}</classesDirectory>
 						<skipNativeTests>true</skipNativeTests>
 						<buildArgs>
-							<arg>--allow-incomplete-classpath</arg>
 							<arg>--trace-object-instantiation=java.util.jar.JarFile</arg>
 							<!--
 							<arg>-initialize-at-run-time=</arg>
@@ -144,7 +148,9 @@
 
 								<image>
 									<env>
+										<!--
 										<BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>
+										-->
 										<BP_NATIVE_IMAGE_BUILD_ARGUMENTS>--no-fallback</BP_NATIVE_IMAGE_BUILD_ARGUMENTS>
 										<BP_JVM_VERSION>17</BP_JVM_VERSION>
 									</env>

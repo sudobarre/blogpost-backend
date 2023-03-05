@@ -34,11 +34,11 @@ public class Post {
     @Column(name = "body", columnDefinition = "text")
     private String description;
     private Integer voteCount = 0;
-    @ManyToOne(fetch = EAGER)
+    @ManyToOne
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     private User user;
     private Instant createdDate;
-    @ManyToOne(fetch = EAGER)
+    @ManyToOne
     @JoinColumn(name = "forumId", referencedColumnName = "forumId")
     private Forum forum;
 
