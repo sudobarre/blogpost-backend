@@ -51,9 +51,9 @@ public class CommentService {
 
 
     private void sendCommentNotification(String message, User user) {
-        mailService.sendMail(new NotificationEmail(user.getUsername() + " commented on your post:\n",
-                "Someone commented on your post!",
-                message));
+        mailService.sendMail(new NotificationEmail("Someone commented on your post.",
+                user.getUsername(),
+                user.getUsername() + " commented on your post:\n" + message));
     }
 
     public List<CommentsDto> getAllCommentsFromPost(Long postId, int page, int size, String sortBy, String direction) {
