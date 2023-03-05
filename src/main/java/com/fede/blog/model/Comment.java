@@ -1,3 +1,4 @@
+
 package com.fede.blog.model;
 
 
@@ -6,10 +7,11 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.Instant;
 
-import static jakarta.persistence.FetchType.EAGER;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Data
@@ -23,11 +25,12 @@ public class Comment {
     @NotEmpty
     @Column(name="body", columnDefinition="text")
     private String text;
-    @ManyToOne(fetch = EAGER, cascade = CascadeType.REMOVE)
+    @ManyToOne
     @JoinColumn(name = "postId", referencedColumnName = "postId")
+    //@OnDelete(action= OnDeleteAction.CASCADE)
     private Post post;
     private Instant createdDate;
-    @ManyToOne(fetch = EAGER)
+    @ManyToOne
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     private User user;
     private Integer voteCount = 0;

@@ -422,7 +422,10 @@
   "methods":[
     {"name":"<init>","parameterTypes":["com.fede.blog.service.AuthService"] }, 
     {"name":"login","parameterTypes":["com.fede.blog.dto.request.LoginRequest"] }, 
-    {"name":"logout","parameterTypes":[] }
+    {"name":"logout","parameterTypes":[] }, 
+    {"name":"refreshToken","parameterTypes":["jakarta.servlet.http.HttpServletRequest"] }, 
+    {"name":"signup","parameterTypes":["com.fede.blog.dto.request.SignupRequest","jakarta.servlet.http.HttpServletRequest"] }, 
+    {"name":"verifyAccount","parameterTypes":["java.lang.String"] }
   ]
 },
 {
@@ -433,7 +436,9 @@
   "methods":[
     {"name":"<init>","parameterTypes":["com.fede.blog.service.CommentService"] }, 
     {"name":"createComment","parameterTypes":["com.fede.blog.dto.CommentsDto"] }, 
-    {"name":"getAllCommentsFromPost","parameterTypes":["java.lang.Long","int","int","java.lang.String","java.lang.String"] }
+    {"name":"deleteComment","parameterTypes":["java.lang.Long"] }, 
+    {"name":"getAllCommentsFromPost","parameterTypes":["java.lang.Long","int","int","java.lang.String","java.lang.String"] }, 
+    {"name":"getAllCommentsFromUser","parameterTypes":["java.lang.String","int","int","java.lang.String","java.lang.String"] }
   ]
 },
 {
@@ -476,6 +481,7 @@
     {"name":"getAllPosts","parameterTypes":["int","int","java.lang.String","java.lang.String"] }, 
     {"name":"getPost","parameterTypes":["java.lang.Long"] }, 
     {"name":"getPostsByForum","parameterTypes":["java.lang.String","int","int","java.lang.String","java.lang.String"] }, 
+    {"name":"getPostsByUsername","parameterTypes":["java.lang.String","int","int","java.lang.String","java.lang.String"] }, 
     {"name":"save","parameterTypes":["com.fede.blog.dto.request.PostRequest"] }, 
     {"name":"savedPosts","parameterTypes":[] }, 
     {"name":"unsave","parameterTypes":["com.fede.blog.dto.request.PostRequest"] }
@@ -589,6 +595,19 @@
     {"name":"setForumName","parameterTypes":["java.lang.String"] }, 
     {"name":"setPostName","parameterTypes":["java.lang.String"] }, 
     {"name":"setUrl","parameterTypes":["java.lang.String"] }, 
+    {"name":"setUsername","parameterTypes":["java.lang.String"] }
+  ]
+},
+{
+  "name":"com.fede.blog.dto.request.SignupRequest",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[
+    {"name":"<init>","parameterTypes":[] }, 
+    {"name":"setEmail","parameterTypes":["java.lang.String"] }, 
+    {"name":"setPassword","parameterTypes":["java.lang.String"] }, 
+    {"name":"setRole","parameterTypes":["java.util.List"] }, 
     {"name":"setUsername","parameterTypes":["java.lang.String"] }
   ]
 },
@@ -928,7 +947,9 @@
   "methods":[
     {"name":"<init>","parameterTypes":[] }, 
     {"name":"createRefreshToken","parameterTypes":["java.lang.Long"] }, 
-    {"name":"deleteByUserId","parameterTypes":["java.lang.Long"] }
+    {"name":"deleteByUserId","parameterTypes":["java.lang.Long"] }, 
+    {"name":"findByToken","parameterTypes":["java.lang.String"] }, 
+    {"name":"verifyExpiration","parameterTypes":["com.fede.blog.model.RefreshToken"] }
   ]
 },
 {
@@ -967,7 +988,10 @@
     {"name":"getCurrentUser","parameterTypes":[] }, 
     {"name":"isLoggedIn","parameterTypes":[] }, 
     {"name":"login","parameterTypes":["com.fede.blog.dto.request.LoginRequest"] }, 
-    {"name":"logout","parameterTypes":[] }
+    {"name":"logout","parameterTypes":[] }, 
+    {"name":"refreshToken","parameterTypes":["jakarta.servlet.http.HttpServletRequest"] }, 
+    {"name":"signup","parameterTypes":["com.fede.blog.dto.request.SignupRequest","jakarta.servlet.http.HttpServletRequest"] }, 
+    {"name":"verifyAccount","parameterTypes":["java.lang.String"] }
   ]
 },
 {
@@ -985,7 +1009,9 @@
   "queryAllDeclaredConstructors":true,
   "methods":[
     {"name":"<init>","parameterTypes":["com.fede.blog.repository.PostRepository","com.fede.blog.repository.UserRepository","com.fede.blog.service.AuthService","com.fede.blog.mapper.CommentMapper","com.fede.blog.repository.CommentRepository","com.fede.blog.service.MailService"] }, 
+    {"name":"deleteComment","parameterTypes":["java.lang.Long"] }, 
     {"name":"getAllCommentsFromPost","parameterTypes":["java.lang.Long","int","int","java.lang.String","java.lang.String"] }, 
+    {"name":"getAllCommentsFromUser","parameterTypes":["java.lang.String","int","int","java.lang.String","java.lang.String"] }, 
     {"name":"save","parameterTypes":["com.fede.blog.dto.CommentsDto"] }
   ]
 },
@@ -1047,6 +1073,7 @@
     {"name":"getAllPosts","parameterTypes":["int","int","java.lang.String","java.lang.String"] }, 
     {"name":"getPost","parameterTypes":["java.lang.Long"] }, 
     {"name":"getPostsByForum","parameterTypes":["java.lang.String","int","int","java.lang.String","java.lang.String"] }, 
+    {"name":"getPostsByUsername","parameterTypes":["java.lang.String","int","int","java.lang.String","java.lang.String"] }, 
     {"name":"save","parameterTypes":["com.fede.blog.dto.request.PostRequest"] }, 
     {"name":"savedPosts","parameterTypes":[] }, 
     {"name":"unsave","parameterTypes":["com.fede.blog.dto.request.PostRequest"] }
@@ -1764,6 +1791,15 @@
   "queryAllDeclaredMethods":true
 },
 {
+  "name":"jakarta.validation.ConstraintValidator",
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "methods":[
+    {"name":"initialize","parameterTypes":["java.lang.annotation.Annotation"] }, 
+    {"name":"isValid","parameterTypes":["java.lang.Object","jakarta.validation.ConstraintValidatorContext"] }
+  ]
+},
+{
   "name":"jakarta.validation.ConstraintViolation"
 },
 {
@@ -2313,6 +2349,9 @@
   "name":"jdk.internal.reflect.DelegatingMethodAccessorImpl"
 },
 {
+  "name":"jdk.internal.reflect.GeneratedMethodAccessor40"
+},
+{
   "name":"jdk.internal.reflect.NativeMethodAccessorImpl"
 },
 {
@@ -2848,6 +2887,10 @@
   "name":"org.hibernate.action.internal.EntityDeleteAction"
 },
 {
+  "name":"org.hibernate.annotations.OnDelete",
+  "queryAllDeclaredMethods":true
+},
+{
   "name":"org.hibernate.boot.archive.scan.internal.DisabledScanner",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
@@ -3190,8 +3233,32 @@
   "allPublicFields":true
 },
 {
+  "name":"org.hibernate.validator.internal.constraintvalidators.AbstractEmailValidator",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"isValid","parameterTypes":["java.lang.Object","jakarta.validation.ConstraintValidatorContext"] }]
+},
+{
+  "name":"org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[
+    {"name":"<init>","parameterTypes":[] }, 
+    {"name":"initialize","parameterTypes":["java.lang.annotation.Annotation"] }, 
+    {"name":"isValid","parameterTypes":["java.lang.CharSequence","jakarta.validation.ConstraintValidatorContext"] }, 
+    {"name":"isValid","parameterTypes":["java.lang.Object","jakarta.validation.ConstraintValidatorContext"] }
+  ]
+},
+{
   "name":"org.hibernate.validator.internal.constraintvalidators.bv.NotBlankValidator",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[
+    {"name":"<init>","parameterTypes":[] }, 
+    {"name":"isValid","parameterTypes":["java.lang.Object","jakarta.validation.ConstraintValidatorContext"] }
+  ]
 },
 {
   "name":"org.hibernate.validator.internal.constraintvalidators.bv.NotNullValidator",
@@ -3200,6 +3267,17 @@
 {
   "name":"org.hibernate.validator.internal.constraintvalidators.bv.notempty.NotEmptyValidatorForCharSequence",
   "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.hibernate.validator.internal.constraintvalidators.bv.size.SizeValidatorForCharSequence",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[
+    {"name":"<init>","parameterTypes":[] }, 
+    {"name":"initialize","parameterTypes":["java.lang.annotation.Annotation"] }, 
+    {"name":"isValid","parameterTypes":["java.lang.Object","jakarta.validation.ConstraintValidatorContext"] }
+  ]
 },
 {
   "name":"org.hibernate.validator.internal.engine.AbstractConfigurationImpl",

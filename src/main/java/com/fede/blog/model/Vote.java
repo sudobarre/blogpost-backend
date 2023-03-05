@@ -7,6 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import jakarta.persistence.CascadeType;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -21,16 +24,17 @@ public class Vote {
     private Long voteId;
     private VoteType voteType;
     @NotNull
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.REMOVE})
+    @ManyToOne
     @JoinColumn(name = "postId", referencedColumnName = "postId")
+    @OnDelete(action= OnDeleteAction.CASCADE)
     private Post post;
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.REMOVE})
+    @ManyToOne
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     private User user;
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.REMOVE})
+    @ManyToOne
     @JoinColumn(name = "commentId", referencedColumnName = "commentId")
     private Comment comment;
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.REMOVE})
+    @ManyToOne
     @JoinColumn(name = "forumId", referencedColumnName = "forumId")
     private Forum forum;
 }

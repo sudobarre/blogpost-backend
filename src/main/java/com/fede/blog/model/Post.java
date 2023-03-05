@@ -10,10 +10,9 @@ import lombok.NoArgsConstructor;
 import org.springframework.lang.Nullable;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-import static jakarta.persistence.FetchType.EAGER;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Data
@@ -42,6 +41,6 @@ public class Post {
     @JoinColumn(name = "forumId", referencedColumnName = "forumId")
     private Forum forum;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
-    private List<Comment> comments;
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 }
