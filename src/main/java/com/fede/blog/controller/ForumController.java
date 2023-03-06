@@ -30,7 +30,7 @@ public class ForumController {
     }
 
 
-    @GetMapping(value = "/all", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/all")
     //forum/all?page=1&limit=5&sort=published,desc&sort=title,asc
     public ResponseEntity<List<ForumDto>> getAllForums(
             @RequestParam(defaultValue = "0") int page,
@@ -44,7 +44,7 @@ public class ForumController {
                 .body(res);
     }
 
-    @GetMapping(value = "/{forumName}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{forumName}")
     public ResponseEntity<ForumDto> getForum(@PathVariable(name = "forumName") String forumName) {
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -53,7 +53,7 @@ public class ForumController {
 
     //only maps the name and description of forum.
     @PreAuthorize("hasAnyRole('USER','ADMIN', 'MODERATOR')")
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping
     public ResponseEntity<?> editForum(@Valid @RequestBody ForumDto forumDto){
        forumService.edit(forumDto);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -61,13 +61,13 @@ public class ForumController {
 
     //only admins can delete a forum for now.
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping
     public ResponseEntity<?> deleteForum(@PathVariable(name = "id") Long id){
         return forumService.delete(id);
     }
 
     @PreAuthorize("hasAnyRole('USER','ADMIN', 'MODERATOR')")
-    @GetMapping(value = "/by-user/{name}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/by-user/{name}")
     public ResponseEntity<List<ForumDto>> getForumsByUsername(
             @PathVariable(name = "name") String username,
             @RequestParam(defaultValue = "0") int page,

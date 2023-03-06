@@ -74,7 +74,7 @@ jobs:
 
 
       # BUILD NATIVE IMAGE USING DOCKER BUILD
-      - name: Build and push Docker image
+      - name: Build and push Docker image to Github Container Registry
         uses: docker/build-push-action@v2
         with:
             context: ./
@@ -94,5 +94,5 @@ jobs:
               MAIL_HOST=${{ secrets.MAIL_HOST }}
 
 
-      - name: Deploy Spring Boot app to fly.io
+      - name: Deploy app to fly.io
         run: flyctl deploy --image ghcr.io/sudobarre/blogpost-backend

@@ -18,7 +18,7 @@ public class UserController {
     private final UserService userService;
 
     @PreAuthorize("hasAnyRole('USER','ADMIN', 'MODERATOR')")
-    @PutMapping(value = "/edit", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/edit")
     public ResponseEntity<?> editUser(UserDto userDto){
         userService.editUser(userDto);
         return new ResponseEntity<>(OK);

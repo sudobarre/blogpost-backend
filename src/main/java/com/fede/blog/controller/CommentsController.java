@@ -29,7 +29,7 @@
             return new ResponseEntity<>(CREATED);
         }
 
-        @GetMapping(value = "/by-post/{postId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+        @GetMapping(value = "/by-post/{postId}")
         public ResponseEntity<List<CommentsDto>> getAllCommentsFromPost(
                 @PathVariable(name = "postId") Long postId,
                 @RequestParam(defaultValue = "0") int page,
@@ -41,7 +41,7 @@
                     .body(commentService.getAllCommentsFromPost(postId, page, limit, sortBy, direction));
         }
 
-        @GetMapping(value = "/by-user/{userName}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+        @GetMapping(value = "/by-user/{userName}")
         public ResponseEntity<List<CommentsDto>> getAllCommentsFromUser(
                 @PathVariable(name = "userName") String userName,
                 @RequestParam(defaultValue = "0") int page,
@@ -67,7 +67,7 @@
 
         //only accessible by mod, admins or owner of comment.
         @PreAuthorize("hasAnyRole('USER','ADMIN', 'MODERATOR')")
-        @DeleteMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+        @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deleteComment(@PathVariable(name = "id") Long id){
         return commentService.deleteComment(id);
     }

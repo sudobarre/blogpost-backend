@@ -34,7 +34,7 @@ public class PostController {
 
 
     //returns a pageable
-    @GetMapping(value = "/all", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/all")
     public ResponseEntity<List<PostResponse>> getAllPosts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int limit,
@@ -45,12 +45,12 @@ public class PostController {
         return status(OK).body(postService.getAllPosts(page, limit,  sortBy, direction));
     }
 
-    @GetMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}")
     public ResponseEntity<PostResponse> getPost(@PathVariable(name = "id") Long id) {
         return status(OK).body(postService.getPost(id));
     }
 
-    @GetMapping(value = "/by-forum/{name}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/by-forum/{name}")
     public ResponseEntity<List<PostResponse>> getPostsByForum(
             @PathVariable(name = "name") String forumName,
             @RequestParam(defaultValue = "0") int page,
@@ -61,7 +61,7 @@ public class PostController {
         return status(OK).body(postService.getPostsByForum(forumName, page, limit,  sortBy, direction));
     }
 
-    @GetMapping(value = "/by-user/{name}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/by-user/{name}")
     public ResponseEntity<List<PostResponse>> getPostsByUsername(
             @PathVariable(name = "name") String username,
             @RequestParam(defaultValue = "0") int page,
@@ -74,14 +74,14 @@ public class PostController {
 
     //only accessible by mod, admins or owner of post.
     @PreAuthorize("hasAnyRole('USER','ADMIN', 'MODERATOR')")
-    @PutMapping(value = "/edit", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/edit")
     public ResponseEntity<?> editPost(@RequestBody PostRequest postRequest){
         return postService.editPost(postRequest);
     }
 
     //only accessible by mod, admins or owner of post.
     @PreAuthorize("hasAnyRole('USER','ADMIN', 'MODERATOR')")
-    @DeleteMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deletePost(@PathVariable(name = "id") Long id){
         return postService.deletePost(id);
     }
@@ -101,7 +101,7 @@ public class PostController {
     }
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN', 'MODERATOR')")
-    @GetMapping(value = "/saved", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/saved")
     public ResponseEntity<List<PostResponse>> savedPosts(){
         return new ResponseEntity<>(postService.savedPosts(), OK);
     }
