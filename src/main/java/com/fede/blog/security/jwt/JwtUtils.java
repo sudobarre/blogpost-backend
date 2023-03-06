@@ -55,12 +55,12 @@ public class JwtUtils {
     }
 
     public ResponseCookie getCleanJwtCookie() {
-        ResponseCookie cookie = ResponseCookie.from(jwtCookie, null).path("/api").build();
+        ResponseCookie cookie = ResponseCookie.from(jwtCookie, "").path("/api").build();
         return cookie;
     }
 
     public ResponseCookie getCleanJwtRefreshCookie() {
-        ResponseCookie cookie = ResponseCookie.from(jwtRefreshCookie, null).path("/api/v1/auth/refreshtoken").build();
+        ResponseCookie cookie = ResponseCookie.from(jwtRefreshCookie, "").path("/api/v1/auth/refreshtoken").build();
         return cookie;
     }
 
@@ -97,7 +97,13 @@ public class JwtUtils {
     }
 
     private ResponseCookie generateCookie(String name, String value, String path) {
-        ResponseCookie cookie = ResponseCookie.from(name, value).path(path).maxAge(24 * 60 * 60).httpOnly(true).build();
+        ResponseCookie cookie = ResponseCookie.from(name, value)
+                .path(path)
+                .maxAge(24 * 60 * 60)
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("None")
+                .build();
         return cookie;
     }
 

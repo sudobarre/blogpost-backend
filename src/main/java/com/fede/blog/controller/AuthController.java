@@ -30,7 +30,7 @@ public class AuthController {
     public ResponseEntity<String> verifyAccount(@PathVariable(name = "token") String token) {
         authService.verifyAccount(token);
         //too lazy to create a nice template for the account activation
-        return new ResponseEntity<>("Account activated successfully! Please close this window and log in with your registered username.", OK);
+        return new ResponseEntity<>("Account activated successfully! You can now close this window and log in with your registered username.", OK);
     }
 
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

@@ -56,11 +56,12 @@ public class AuthService {
     private final RoleRepository roleRepository;
 
     static final String accountVerificationUri = "/api/v1/auth/accountVerification/";
-    static final String passwordChangeUrl = "api/v1/auth/accountVerification/";
+    //static final String passwordChangeUrl = "api/v1/auth/accountVerification/";
 
     public ResponseEntity<String> signup(SignupRequest signupRequest, HttpServletRequest request) {
 
 
+        //convert to lowercase
         if (userRepository.existsByUsername(signupRequest.getUsername())) {
             return ResponseEntity.badRequest().body("Error: Username is already taken!");
         }
@@ -112,7 +113,7 @@ public class AuthService {
 
         String domainUrl = getDomain(request);
         String token = generateVerificationToken(user);
-        mailService.sendMail(new NotificationEmail("Activate your Account.",
+        mailService.sendMail(new NotificationEmail("[Blogpost] Activate your Account.",
                 user.getEmail(), "You received this email because you signed up to sudobarre's blog." +
                 " If this wasn't you, ignore this mail. Please click on the link below to activate your account: "
                 + domainUrl
@@ -244,6 +245,6 @@ public class AuthService {
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
                 .header(HttpHeaders.SET_COOKIE, jwtRefreshCookie.toString())
-                .body(new MessageResponse("You've been signed out!"));
+                .body(new MessageResponse("You've been signed out."));
     }
 }
