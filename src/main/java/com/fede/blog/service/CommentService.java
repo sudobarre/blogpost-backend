@@ -54,8 +54,8 @@ public class CommentService {
 
 
     private void sendCommentNotification(String message, User user) {
-        mailService.sendMail(new NotificationEmail("Someone commented on your post.",
-                user.getUsername(),
+        mailService.sendMail(new NotificationEmail("[Blogpost] Someone commented on your post!",
+                user.getEmail(),
                 user.getUsername() + " commented on your post:\n" + message));
     }
 

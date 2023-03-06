@@ -67,6 +67,7 @@ public class WebSecurityConfig {
         http.csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
                 .and()
                 .authorizeHttpRequests().requestMatchers(
                         "/api/v1/auth/**",
@@ -74,8 +75,11 @@ public class WebSecurityConfig {
                         "/swagger-ui.html",
                         "/v3/api-docs/**",
                         "/actuator/**").permitAll()
+
+
                 .and()
                 .authorizeHttpRequests().requestMatchers( HttpMethod.GET,
+
                         "/api/v1/post/**",
                         "/api/v1/comments/**",
                         "/api/v1/forum/**").permitAll()
