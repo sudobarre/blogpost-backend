@@ -1,21 +1,18 @@
 package com.fede.blog.security.services;
 
 
-import java.io.Serial;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
-import com.fede.blog.exceptions.BlogException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fede.blog.model.User;
-import com.fede.blog.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.io.Serial;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Transactional
 public class UserDetailsImpl implements UserDetails {

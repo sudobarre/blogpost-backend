@@ -1,17 +1,13 @@
 package com.fede.blog.service;
 
 import com.fede.blog.dto.ForumDto;
-import com.fede.blog.dto.response.PostResponse;
 import com.fede.blog.exceptions.BlogException;
 import com.fede.blog.exceptions.ForumNotFoundException;
-import com.fede.blog.exceptions.PostNotFoundException;
 import com.fede.blog.mapper.ForumMapper;
 import com.fede.blog.model.Forum;
-import com.fede.blog.model.Post;
 import com.fede.blog.model.User;
 import com.fede.blog.repository.ForumRepository;
 import com.fede.blog.repository.UserRepository;
-import com.fede.blog.security.services.UserDetailsImpl;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -20,17 +16,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;

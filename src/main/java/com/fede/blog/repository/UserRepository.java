@@ -1,8 +1,6 @@
 package com.fede.blog.repository;
 
-import com.fede.blog.model.Forum;
 import com.fede.blog.model.User;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -5,9 +5,9 @@ import com.fede.blog.dto.response.PostResponse;
 import com.fede.blog.service.PostService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -21,20 +21,20 @@ import static org.springframework.http.ResponseEntity.status;
 @RequestMapping("/api/v1/post")
 @AllArgsConstructor
 @Slf4j
-//@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 public class PostController {
 
     private final PostService postService;
 
     @PreAuthorize("hasAnyRole('USER','ADMIN', 'MODERATOR')")
-    @PostMapping
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createPost(@RequestBody PostRequest postRequest) {
         postService.create(postRequest);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 
-    @GetMapping("/all")
+    //returns a pageable
+    @GetMapping(value = "/all", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<PostResponse>> getAllPosts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int limit,
@@ -45,12 +45,12 @@ public class PostController {
         return status(OK).body(postService.getAllPosts(page, limit,  sortBy, direction));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PostResponse> getPost(@PathVariable(name = "id") Long id) {
         return status(OK).body(postService.getPost(id));
     }
 
-    @GetMapping("/by-forum/{name}")
+    @GetMapping(value = "/by-forum/{name}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<PostResponse>> getPostsByForum(
             @PathVariable(name = "name") String forumName,
             @RequestParam(defaultValue = "0") int page,
@@ -61,7 +61,7 @@ public class PostController {
         return status(OK).body(postService.getPostsByForum(forumName, page, limit,  sortBy, direction));
     }
 
-    @GetMapping("/by-user/{name}")
+    @GetMapping(value = "/by-user/{name}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<PostResponse>> getPostsByUsername(
             @PathVariable(name = "name") String username,
             @RequestParam(defaultValue = "0") int page,
@@ -74,34 +74,34 @@ public class PostController {
 
     //only accessible by mod, admins or owner of post.
     @PreAuthorize("hasAnyRole('USER','ADMIN', 'MODERATOR')")
-    @PutMapping("/edit")
+    @PutMapping(value = "/edit", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> editPost(@RequestBody PostRequest postRequest){
         return postService.editPost(postRequest);
     }
 
     //only accessible by mod, admins or owner of post.
     @PreAuthorize("hasAnyRole('USER','ADMIN', 'MODERATOR')")
-    @DeleteMapping("/{id}")
+    @DeleteMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deletePost(@PathVariable(name = "id") Long id){
         return postService.deletePost(id);
     }
 
     @PreAuthorize("hasAnyRole('USER','ADMIN', 'MODERATOR')")
-    @PostMapping("/save")
+    @PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> save(@RequestBody @Valid PostRequest postRequest){
         postService.save(postRequest);
         return new ResponseEntity<>(OK);
     }
 
     @PreAuthorize("hasAnyRole('USER','ADMIN', 'MODERATOR')")
-    @PostMapping("/unsave")
+    @PostMapping(value = "/unsave", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> unsave(@RequestBody @Valid PostRequest postRequest){
         postService.unsave(postRequest);
         return new ResponseEntity<>(OK);
     }
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN', 'MODERATOR')")
-    @GetMapping("/saved")
+    @GetMapping(value = "/saved", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<PostResponse>> savedPosts(){
         return new ResponseEntity<>(postService.savedPosts(), OK);
     }

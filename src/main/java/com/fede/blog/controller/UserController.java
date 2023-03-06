@@ -1,18 +1,12 @@
 package com.fede.blog.controller;
-import com.fede.blog.dto.*;
 
-import com.fede.blog.dto.response.PostResponse;
-import com.fede.blog.service.AuthService;
+import com.fede.blog.dto.UserDto;
 import com.fede.blog.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -24,14 +18,14 @@ public class UserController {
     private final UserService userService;
 
     @PreAuthorize("hasAnyRole('USER','ADMIN', 'MODERATOR')")
-    @PutMapping("/edit")
+    @PutMapping(value = "/edit", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> editUser(UserDto userDto){
         userService.editUser(userDto);
         return new ResponseEntity<>(OK);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR')")
-    @PostMapping("/ban/{username}")
+    @PostMapping(value = "/ban/{username}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> banUser(@PathVariable(name = "username") String username){
         userService.banUser(username);
         return new ResponseEntity<>(OK);

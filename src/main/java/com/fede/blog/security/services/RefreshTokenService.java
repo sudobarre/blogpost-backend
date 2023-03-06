@@ -1,9 +1,5 @@
 package com.fede.blog.security.services;
 
-import java.time.Instant;
-import java.util.Optional;
-import java.util.UUID;
-
 import com.fede.blog.exceptions.TokenRefreshException;
 import com.fede.blog.model.RefreshToken;
 import com.fede.blog.repository.RefreshTokenRepository;
@@ -11,9 +7,12 @@ import com.fede.blog.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Instant;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Slf4j

@@ -1,12 +1,12 @@
 package com.fede.blog.controller;
 
 import com.fede.blog.dto.ForumDto;
-import com.fede.blog.dto.response.PostResponse;
 import com.fede.blog.service.ForumService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -24,13 +24,13 @@ public class ForumController {
 
     private final ForumService forumService;
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createForum(@Valid @RequestBody ForumDto forumDto) {
         return forumService.save(forumDto);
     }
 
 
-    @GetMapping("/all")
+    @GetMapping(value = "/all", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     //forum/all?page=1&limit=5&sort=published,desc&sort=title,asc
     public ResponseEntity<List<ForumDto>> getAllForums(
             @RequestParam(defaultValue = "0") int page,
@@ -44,7 +44,7 @@ public class ForumController {
                 .body(res);
     }
 
-    @GetMapping("/{forumName}")
+    @GetMapping(value = "/{forumName}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ForumDto> getForum(@PathVariable(name = "forumName") String forumName) {
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -53,7 +53,7 @@ public class ForumController {
 
     //only maps the name and description of forum.
     @PreAuthorize("hasAnyRole('USER','ADMIN', 'MODERATOR')")
-    @PutMapping
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> editForum(@Valid @RequestBody ForumDto forumDto){
        forumService.edit(forumDto);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -61,13 +61,13 @@ public class ForumController {
 
     //only admins can delete a forum for now.
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping
+    @DeleteMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteForum(@PathVariable(name = "id") Long id){
         return forumService.delete(id);
     }
 
     @PreAuthorize("hasAnyRole('USER','ADMIN', 'MODERATOR')")
-    @GetMapping("/by-user/{name}")
+    @GetMapping(value = "/by-user/{name}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ForumDto>> getForumsByUsername(
             @PathVariable(name = "name") String username,
             @RequestParam(defaultValue = "0") int page,

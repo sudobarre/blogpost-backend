@@ -1,22 +1,13 @@
 package com.fede.blog.service;
 
 import com.fede.blog.dto.UserDto;
-import com.fede.blog.dto.response.PostResponse;
 import com.fede.blog.mapper.PostMapper;
 import com.fede.blog.model.User;
 import com.fede.blog.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-
-import java.util.List;
-import java.util.Objects;
-
-import static java.util.stream.Collectors.toList;
 
 @Service
 @AllArgsConstructor

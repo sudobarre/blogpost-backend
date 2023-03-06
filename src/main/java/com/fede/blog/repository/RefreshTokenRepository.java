@@ -2,7 +2,6 @@ package com.fede.blog.repository;
 
 import com.fede.blog.model.RefreshToken;
 import com.fede.blog.model.User;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;

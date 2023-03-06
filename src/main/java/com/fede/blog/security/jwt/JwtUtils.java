@@ -2,6 +2,7 @@ package com.fede.blog.security.jwt;
 
 import com.fede.blog.model.User;
 import com.fede.blog.security.services.UserDetailsImpl;
+import io.jsonwebtoken.*;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -9,9 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
-
-
-import io.jsonwebtoken.*;
 import org.springframework.web.util.WebUtils;
 
 import java.util.Date;
