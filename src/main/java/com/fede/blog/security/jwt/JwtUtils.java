@@ -25,9 +25,6 @@ public class JwtUtils {
     @Value("${jwt.expiration}")
     private Long jwtExpirationMs;
 
-    @Value("$(jwt.refresh.expiration)")
-    private Long jwtRefreshExpirationMs;
-
     @Value("${jwt.cookie.name}")
     private String jwtCookie;
 
@@ -36,17 +33,17 @@ public class JwtUtils {
 
 
     public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal) {
-        String jwt = generateTokenFromUsername(userPrincipal.getUsername(), jwtExpirationMs);
-        return generateCookie(jwtCookie, jwt, "/api", jwtExpirationMs);
+        String jwt = generateTokenFromUsername(userPrincipal.getUsername());
+        return generateCookie(jwtCookie, jwt, "/api");
     }
 
     public ResponseCookie generateJwtCookie(User user) {
-        String jwt = generateTokenFromUsername(user.getUsername(), jwtExpirationMs);
-        return generateCookie(jwtCookie, jwt, "/api",jwtExpirationMs);
+        String jwt = generateTokenFromUsername(user.getUsername());
+        return generateCookie(jwtCookie, jwt, "/api");
     }
 
     public ResponseCookie generateRefreshJwtCookie(String refreshToken) {
-        return generateCookie(jwtRefreshCookie, refreshToken, "/api/v1/auth", jwtRefreshExpirationMs);
+        return generateCookie(jwtRefreshCookie, refreshToken, "/api/v1/auth");
     }
 
     public String getJwtFromCookies(HttpServletRequest request) {
@@ -90,16 +87,16 @@ public class JwtUtils {
         return false;
     }
 
-    public String generateTokenFromUsername(String username, Long expirationMs) {
+    public String generateTokenFromUsername(String username) {
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + expirationMs))
+                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
 
-    private ResponseCookie generateCookie(String name, String value, String path, Long expirationMs) {
+    private ResponseCookie generateCookie(String name, String value, String path) {
         ResponseCookie cookie = ResponseCookie.from(name, value)
                 .path(path)
                 .maxAge(24 * 60 * 60)
