@@ -197,8 +197,8 @@ public class AuthService {
         ResponseCookie jwtRefreshCookie = jwtUtils.generateRefreshJwtCookie(refreshToken.getToken());
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-                .header(HttpHeaders.SET_COOKIE, jwtRefreshCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, jwtCookie.toString()+ "; SameSite=None; Secure")
+                .header(HttpHeaders.SET_COOKIE, jwtRefreshCookie.toString()+ "; SameSite=None; Secure")
                 .body(new UserInfoResponse(userDetails.getId(),
                         userDetails.getUsername(),
                         userDetails.getEmail(),
@@ -216,7 +216,7 @@ public class AuthService {
                         ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(user);
 
                         return ResponseEntity.ok()
-                                .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                                .header(HttpHeaders.SET_COOKIE, jwtCookie.toString()+ "; SameSite=None; Secure")
                                 .body(new MessageResponse("Token is refreshed successfully!"));
                     })
                     .orElseThrow(() -> new TokenRefreshException(refreshToken,
@@ -243,8 +243,8 @@ public class AuthService {
         ResponseCookie jwtRefreshCookie = jwtUtils.getCleanJwtRefreshCookie();
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-                .header(HttpHeaders.SET_COOKIE, jwtRefreshCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, jwtCookie.toString()+ "; SameSite=None; Secure")
+                .header(HttpHeaders.SET_COOKIE, jwtRefreshCookie.toString()+ "; SameSite=None; Secure")
                 .body(new MessageResponse("You've been signed out."));
     }
 }
