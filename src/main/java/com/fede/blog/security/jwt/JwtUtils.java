@@ -25,6 +25,9 @@ public class JwtUtils {
     @Value("${jwt.expiration}")
     private Long jwtExpirationMs;
 
+    @Value("$(jwt.refresh.expiration)")
+    private Long jwtRefreshExpirationMs;
+
     @Value("${jwt.cookie.name}")
     private String jwtCookie;
 
@@ -33,17 +36,17 @@ public class JwtUtils {
 
 
     public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal) {
-        String jwt = generateTokenFromUsername(userPrincipal.getUsername());
-        return generateCookie(jwtCookie, jwt, "/api");
+        String jwt = generateTokenFromUsername(userPrincipal.getUsername(), jwtExpirationMs);
+        return generateCookie(jwtCookie, jwt, "/api", jwtExpirationMs);
     }
 
     public ResponseCookie generateJwtCookie(User user) {
-        String jwt = generateTokenFromUsername(user.getUsername());
-        return generateCookie(jwtCookie, jwt, "/api");
+        String jwt = generateTokenFromUsername(user.getUsername(), jwtExpirationMs);
+        return generateCookie(jwtCookie, jwt, "/api",jwtExpirationMs);
     }
 
     public ResponseCookie generateRefreshJwtCookie(String refreshToken) {
-        return generateCookie(jwtRefreshCookie, refreshToken, "/api/v1/auth/refreshtoken");
+        return generateCookie(jwtRefreshCookie, refreshToken, "/api/v1/auth", jwtRefreshExpirationMs);
     }
 
     public String getJwtFromCookies(HttpServletRequest request) {
@@ -60,7 +63,7 @@ public class JwtUtils {
     }
 
     public ResponseCookie getCleanJwtRefreshCookie() {
-        ResponseCookie cookie = ResponseCookie.from(jwtRefreshCookie, "").path("/api/v1/auth/refreshtoken").build();
+        ResponseCookie cookie = ResponseCookie.from(jwtRefreshCookie, "").path("/api/v1/auth").build();
         return cookie;
     }
 
@@ -87,16 +90,16 @@ public class JwtUtils {
         return false;
     }
 
-    public String generateTokenFromUsername(String username) {
+    public String generateTokenFromUsername(String username, Long expirationMs) {
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .setExpiration(new Date((new Date()).getTime() + expirationMs))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
 
-    private ResponseCookie generateCookie(String name, String value, String path) {
+    private ResponseCookie generateCookie(String name, String value, String path, Long expirationMs) {
         ResponseCookie cookie = ResponseCookie.from(name, value)
                 .path(path)
                 .maxAge(24 * 60 * 60)
