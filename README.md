@@ -61,4 +61,5 @@ I deployed the Docker image on <a href='https://fly.io/'>fly.io</a>, using ``` f
   <li>Initial idea taken from <a href="https://github.com/SaiUpadhyayula">Sai Subramanyam Upadhyayula</a>'s <a href="https://github.com/SaiUpadhyayula/spring-reddit-clone">Spring Reddit Clone</a></li>
   <li>This amazing <a href="https://blog.codecentric.de/spring-boot-flyio">blog post</a> by <a href="https://github.com/jonashackt">Jonas Hecht</a> that inspired me to try out and learn Java native images with GraalVM and deploy the app to fly.io</li>
   <li>HTTP-Only JWT idea taken from <a href="https://github.com/bezkoder/spring-security-refresh-token-jwt">BezKoder</a></li>
+  <li>This README template taken from <a href="https://github.com/kylelobo/The-Documentation-Compendium">The Documentation Compendium</a>.</li>
 </ul>

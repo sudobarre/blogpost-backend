@@ -61,7 +61,7 @@ public class ForumController {
 
     //only admins can delete a forum for now.
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deleteForum(@PathVariable(name = "id") Long id){
         return forumService.delete(id);
     }
