@@ -70,11 +70,12 @@ public class WebSecurityConfig {
                         "/swagger-ui/**",
                         "/swagger-ui.html",
                         "/v3/api-docs/**",
-                        "/actuator/**").permitAll()
-
-
+                        "/actuator/**",
+                        "/websocket/**"
+                        ).permitAll()
                 .and()
-                .authorizeHttpRequests().requestMatchers( HttpMethod.GET,
+                .authorizeHttpRequests().requestMatchers(
+                        HttpMethod.GET,
                         "/api/v1/post/**",
                         "/api/v1/comments/**",
                         "/api/v1/forum/**").permitAll()

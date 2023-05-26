@@ -33,6 +33,7 @@ public class Post {
     @Column(name = "body", columnDefinition = "text")
     private String description;
     private Integer voteCount = 0;
+    private Integer viewCount = 0;
     @ManyToOne
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     private User user;

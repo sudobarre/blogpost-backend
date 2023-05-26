@@ -8,6 +8,7 @@ import com.fede.blog.model.Vote;
 import com.fede.blog.repository.PostRepository;
 import com.fede.blog.repository.VoteRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,9 +24,10 @@ public class VoteService {
     private final VoteRepository voteRepository;
     private final PostRepository postRepository;
     private final AuthService authService;
+    private final SimpMessagingTemplate messagingTemplate;
 
     @Transactional
-    public void vote(VoteDto voteDto) {
+    public int vote(VoteDto voteDto) {
         Post post = postRepository.findById(voteDto.getPostId())
                 .orElseThrow(() -> new PostNotFoundException("Post Not Found with ID - " + voteDto.getPostId()));
         Optional<Vote> voteByPostAndUser = voteRepository.findTopByPostAndUserOrderByVoteIdDesc(post, authService.getCurrentUser());
@@ -52,9 +54,13 @@ public class VoteService {
         }
         voteRepository.save(mapToVote(voteDto, post));
         postRepository.save(post);
+        // After saving the vote and updating the vote count, sends the updated vote count to connected clients
+        int updatedVoteCount = post.getVoteCount();
+        messagingTemplate.convertAndSend("/topic/votes", updatedVoteCount);
+        return updatedVoteCount;
     }
 
-    //No need for a new file, its just 1 function only used here.
+    //No need for a mapper class, its just 1 function only used here.
     private Vote mapToVote(VoteDto voteDto, Post post) {
         return Vote.builder()
                 .voteType(voteDto.getVoteType())
