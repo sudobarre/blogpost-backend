@@ -3,6 +3,10 @@ name: autodeploy
 on:
   push:
     branches: [main]
+    paths:
+      - 'pom.xml'
+      - 'src/**'
+
 
 jobs:
   autodeploy:
