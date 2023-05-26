@@ -24,13 +24,13 @@
 ## 🧐 About <a name = "about"></a>
 The backend for my interactive Blogpost to polish my skills in FullStack development that I totally didn't copy from Reddit. The frontend is available <a href="https://github.com/sudobarre/blogpost">here</a>. To see the app live, visit <a href="https://sudobarre.github.io/blogpost/">https://sudobarre.github.io/blogpost/</a>. 
 
-<p>This app is built using Spring Boot 3.0.4. It uses JWT stored in an HTTP-Only Cookie for better security, as well as a Refresh Token feature. The package is available on ghcr.io/sudobarre/blogpost-backend:latest and it's built with GraalVM Native Build Tools to generate a native executable. To understand more about native image generation, visit <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/native-image.html#native-image.developing-your-first-application">here</a>. </p>
+<p>This app is built using Spring Boot 3. It uses JWT stored in an HTTP-Only Cookie for better security, as well as a Refresh Token feature. The package is available on ghcr.io/sudobarre/blogpost-backend:latest and it's built with GraalVM Native Build Tools to generate a native executable. To understand more about native image generation, visit <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/native-image.html#native-image.developing-your-first-application">here</a>. </p>
 
 <p>I'm more than open to receive comments and constructive criticism on anything regarding the project. Feel free to contact me :)</p>
 
 ## 🏁 Getting Started <a name = "getting_started"></a>
 <p>These instructions will get you a copy of the project up and running on your local machine for development purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.</p>
-You can clone this repo and run it as you would normally, or pull it from Github Container Registry with the command ```docker pull ghcr.io/sudobarre/blogpost-backend:latest```
+You can clone this repo and run it as you would normally, or pull it from Github Container Registry with the command ```docker pull ghcr.io/sudobarre/blogpost-backend:latest```.
 
 
 To build the project, you can either do ```mvn clean install```, or if you want to generate a native image, ```mvn clean -Pnative native:compile```. Remember to pass along the env variables as well.
@@ -38,7 +38,7 @@ To build the project, you can either do ```mvn clean install```, or if you want 
 <ul>
   <li>Docker</li>
   <li>GraalVM 22.3 JDK for the Java native image generation. <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/native-image.html#native-image.advanced">here</a> to install it.</li>
-  <li>Spring Boot 3.0.4, or above. https://start.spring.io/</a></li>
+  <li>Spring Boot 3.0.4, or later. https://start.spring.io/</a></li>
 </ul>
 
 ### Installing
@@ -50,7 +50,7 @@ I deployed the Docker image on <a href='https://fly.io/'>fly.io</a>, using ``` f
 
 ## ⛏️ Built Using <a name = "built_using"></a>
 - [PostgreSQL](https://www.postgresql.org/) - Database
-- [Spring Boot 3.0.1](https://spring.io/) - Server Framework
+- [Spring Boot 3](https://spring.io/) - Server Framework
 - [Docker](https://www.docker.com/)
 
 ## ✍️ Author <a name = "author"></a>
