@@ -14,6 +14,7 @@ import com.fede.blog.repository.ForumRepository;
 import com.fede.blog.repository.PostRepository;
 import com.fede.blog.repository.SavedPostRepository;
 import com.fede.blog.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,6 +47,7 @@ public class PostService {
     private final AuthService authService;
     private final PostMapper postMapper;
     private final SavedPostRepository savedPostRepository;
+    private final SimpMessagingTemplate messagingTemplate;
 
 
     public void create(PostRequest postRequest) {
@@ -187,4 +190,31 @@ public class PostService {
                 .orElseThrow(() -> new AlreadySavedException("Post hasn't been saved by the user yet."));
         savedPostRepository.delete(savedPost);
     }
+
+    //for real time display of view count
+    public void incrementViewCount(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new EntityNotFoundException("Post not found"));
+
+        Integer viewCount = post.getViewCount();
+        if (viewCount == null || !isInteger(viewCount.toString())) {
+            viewCount = 0;
+        }
+
+        post.setViewCount(viewCount + 1);
+        postRepository.save(post);
+
+        // Notify clients about the updated view count
+        messagingTemplate.convertAndSend("/topic/post/" + postId + "/viewCount", post.getViewCount());
+    }
+
+    private boolean isInteger(String value) {
+        try {
+            Integer.parseInt(value);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+
 }

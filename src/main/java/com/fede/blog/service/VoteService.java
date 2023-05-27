@@ -26,6 +26,7 @@ public class VoteService {
     private final AuthService authService;
     private final SimpMessagingTemplate messagingTemplate;
 
+    //returns the new updated vote count
     @Transactional
     public int vote(VoteDto voteDto) {
         Post post = postRepository.findById(voteDto.getPostId())
