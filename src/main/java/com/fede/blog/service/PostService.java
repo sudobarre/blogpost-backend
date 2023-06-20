@@ -48,12 +48,19 @@ public class PostService {
     private final PostMapper postMapper;
     private final SavedPostRepository savedPostRepository;
     private final SimpMessagingTemplate messagingTemplate;
+    //private final WebSocketController webSocketController;
 
 
-    public void create(PostRequest postRequest) {
+    public Post create(PostRequest postRequest) {
         Forum forum = forumRepository.findByName(postRequest.getForumName())
                 .orElseThrow(() -> new ForumNotFoundException(postRequest.getForumName()));
-        postRepository.save(postMapper.map(postRequest, forum, authService.getCurrentUser()));
+        Post newPost = postRepository.save(postMapper.map(postRequest, forum, authService.getCurrentUser()));
+        PostResponse postDto = postMapper.mapToDto(newPost);
+
+        // Send notification to WebSocket subscribers
+        //webSocketController.notifyPostCreated(newPost);
+        messagingTemplate.convertAndSend("/topic/postAdded", postDto);
+        return newPost;
     }
 
     @Transactional(readOnly = true)
@@ -142,6 +149,9 @@ public class PostService {
         List<SavedPost> savedPosts = savedPostRepository.findByPost(post);
         savedPostRepository.deleteAll(savedPosts);
         postRepository.deleteById(id);
+        // Send notification to WebSocket subscribers
+        messagingTemplate.convertAndSend("/topic/postDeleted", id);
+        //webSocketController.notifyPostDeleted(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
