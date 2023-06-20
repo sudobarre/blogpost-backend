@@ -9,16 +9,12 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/websocket/votes")
-                .setAllowedOrigins("http://localhost:4200")
-                .withSockJS()
-                .setWebSocketEnabled(false) // Disable WebSocket transport
-                .setStreamBytesLimit(512 * 1024) // Set the stream bytes limit if needed
-                .setHttpMessageCacheSize(1000); // Set the HTTP message cache size if needed
-        registry.addEndpoint("/websocket/votes")
-                .setAllowedOrigins("http://localhost:4200");
+        registry.addEndpoint("/ws")
+                .setAllowedOrigins("http://localhost:4200", "http://localhost:4200/")
+                .withSockJS();
     }
 
     @Override
@@ -27,4 +23,3 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.setApplicationDestinationPrefixes("/app");
     }
 }
-

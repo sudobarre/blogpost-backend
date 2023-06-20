@@ -192,8 +192,10 @@ public class PostService {
     }
 
     //for real time display of view count
-    public void incrementViewCount(Long postId) {
-        Post post = postRepository.findById(postId).orElseThrow(() -> new EntityNotFoundException("Post not found"));
+   @Transactional
+    public int incrementViewCount(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Post not found"));
 
         Integer viewCount = post.getViewCount();
         if (viewCount == null || !isInteger(viewCount.toString())) {
@@ -202,10 +204,16 @@ public class PostService {
 
         post.setViewCount(viewCount + 1);
         postRepository.save(post);
-
-        // Notify clients about the updated view count
-        messagingTemplate.convertAndSend("/topic/post/" + postId + "/viewCount", post.getViewCount());
+        return viewCount + 1;
     }
+
+    @Transactional(readOnly = true)
+    public int getViewCount(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new PostNotFoundException(id.toString()));
+        return post.getViewCount();
+    }
+
 
     private boolean isInteger(String value) {
         try {
@@ -215,6 +223,4 @@ public class PostService {
             return false;
         }
     }
-
-
 }

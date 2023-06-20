@@ -1,30 +1,28 @@
 package com.fede.blog.controller;
 
+import com.fede.blog.dto.response.ViewCountUpdate;
 import com.fede.blog.service.PostService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class WebSocketController {
+
     private final SimpMessagingTemplate messagingTemplate;
-    @Autowired
-    private PostService postService;
-
-    public WebSocketController(SimpMessagingTemplate messagingTemplate) {
+    private final PostService postService;
+    public WebSocketController(SimpMessagingTemplate messagingTemplate, PostService postService) {
         this.messagingTemplate = messagingTemplate;
+        this.postService = postService;
     }
 
-    @MessageMapping("/websocket/votes")
-    public void handleVote(int voteCount) {
-        System.out.println("voteCount = " + voteCount);
-        messagingTemplate.convertAndSend("/topic/votes", voteCount);
+    @MessageMapping("/incrementViewCount/{postId}")
+    @SendTo("/topic/viewCountUpdate")
+    public ViewCountUpdate incrementViewCount(@DestinationVariable Long postId) {
+        int viewCount = postService.incrementViewCount(postId);
+        return new ViewCountUpdate(postId, viewCount);
     }
-    @MessageMapping("/websocket/viewCount/{postId}")
-    public void handleViewCount(@DestinationVariable Long postId, int viewCount) {
-        System.out.println("postId = " + postId + ", viewCount = " + viewCount);
-        messagingTemplate.convertAndSend("/topic/post/" + postId + "/viewCount", viewCount);
-    }
+
 }

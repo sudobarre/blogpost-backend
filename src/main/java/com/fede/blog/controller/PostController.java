@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +25,7 @@ import static org.springframework.http.ResponseEntity.status;
 public class PostController {
 
     private final PostService postService;
+    private final SimpMessagingTemplate messagingTemplate;
 
     @PreAuthorize("hasAnyRole('USER','ADMIN', 'MODERATOR')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -47,9 +49,9 @@ public class PostController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<PostResponse> getPost(@PathVariable(name = "id") Long id) {
-        postService.incrementViewCount(id);
-        return status(OK).body(postService.getPost(id));
+        return ResponseEntity.ok(postService.getPost(id));
     }
+
 
     @GetMapping(value = "/by-forum/{name}")
     public ResponseEntity<List<PostResponse>> getPostsByForum(
