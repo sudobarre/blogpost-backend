@@ -27,6 +27,7 @@ public class PostMapper {
     @Autowired
     private AuthService authService;
 
+    //this function gets called when someone creates a post
     public Post map(PostRequest postRequest, Forum forum, User currentUser) {
     Post post = new Post();
     //postRequest doesnt require an id
@@ -35,25 +36,27 @@ public class PostMapper {
     post.setDescription(postRequest.getDescription());
     post.setForum(forum);
     post.setVoteCount(0);
+    post.setViewCount(0);
     post.setUser(currentUser);
     post.setCreatedDate(Instant.now());
     return post;
     }
 
     public PostResponse mapToDto(Post post) {
-        PostResponse dto = new PostResponse();
-        dto.setId(post.getPostId());
-        dto.setTitle(post.getPostName());
-        dto.setUserName(post.getUser().getUsername());
-        dto.setCommentCount(commentCount(post));
-        dto.setCreatedAt(getDuration(post));
-        dto.setVoteCount(post.getVoteCount());
-        dto.setDownVote(isPostDownVoted(post));
-        dto.setUpVote(isPostUpVoted(post));
-        dto.setUrl(post.getUrl());
-        dto.setDescription(post.getDescription());
-        dto.setForumName(post.getForum().getName());
-        return dto;
+        return PostResponse.builder()
+                .id(post.getPostId())
+                .title(post.getPostName())
+                .userName(post.getUser().getUsername())
+                .commentCount(commentCount(post))
+                .createdAt(getDuration(post))
+                .voteCount(post.getVoteCount())
+                .downVote(isPostDownVoted(post))
+                .upVote(isPostUpVoted(post))
+                .url(post.getUrl())
+                .description(post.getDescription())
+                .forumName(post.getForum().getName())
+                .viewCount(post.getViewCount())
+                .build();
     }
     Integer commentCount(Post post) {
         return commentRepository.findByPost(post).size();

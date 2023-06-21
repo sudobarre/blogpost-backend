@@ -14,6 +14,7 @@ import com.fede.blog.repository.ForumRepository;
 import com.fede.blog.repository.PostRepository;
 import com.fede.blog.repository.SavedPostRepository;
 import com.fede.blog.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,12 +47,20 @@ public class PostService {
     private final AuthService authService;
     private final PostMapper postMapper;
     private final SavedPostRepository savedPostRepository;
+    private final SimpMessagingTemplate messagingTemplate;
+    //private final WebSocketController webSocketController;
 
 
-    public void create(PostRequest postRequest) {
+    public Post create(PostRequest postRequest) {
         Forum forum = forumRepository.findByName(postRequest.getForumName())
                 .orElseThrow(() -> new ForumNotFoundException(postRequest.getForumName()));
-        postRepository.save(postMapper.map(postRequest, forum, authService.getCurrentUser()));
+        Post newPost = postRepository.save(postMapper.map(postRequest, forum, authService.getCurrentUser()));
+        PostResponse postDto = postMapper.mapToDto(newPost);
+
+        // Send notification to WebSocket subscribers
+        //webSocketController.notifyPostCreated(newPost);
+        messagingTemplate.convertAndSend("/topic/postAdded", postDto);
+        return newPost;
     }
 
     @Transactional(readOnly = true)
@@ -139,6 +149,9 @@ public class PostService {
         List<SavedPost> savedPosts = savedPostRepository.findByPost(post);
         savedPostRepository.deleteAll(savedPosts);
         postRepository.deleteById(id);
+        // Send notification to WebSocket subscribers
+        messagingTemplate.convertAndSend("/topic/postDeleted", id);
+        //webSocketController.notifyPostDeleted(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -186,5 +199,38 @@ public class PostService {
         SavedPost savedPost = savedPostRepository.findByUserAndPost(currentUser, post)
                 .orElseThrow(() -> new AlreadySavedException("Post hasn't been saved by the user yet."));
         savedPostRepository.delete(savedPost);
+    }
+
+    //for real time display of view count
+   @Transactional
+    public int incrementViewCount(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Post not found"));
+
+        Integer viewCount = post.getViewCount();
+        if (viewCount == null || !isInteger(viewCount.toString())) {
+            viewCount = 0;
+        }
+
+        post.setViewCount(viewCount + 1);
+        postRepository.save(post);
+        return viewCount + 1;
+    }
+
+    @Transactional(readOnly = true)
+    public int getViewCount(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new PostNotFoundException(id.toString()));
+        return post.getViewCount();
+    }
+
+
+    private boolean isInteger(String value) {
+        try {
+            Integer.parseInt(value);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 }

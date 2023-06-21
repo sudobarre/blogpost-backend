@@ -48,4 +48,5 @@ target/
 mvn-build.sh
 build-and-publish.sh
 src/main/resources/application-dev.properties
+run.sh
 

@@ -7,7 +7,6 @@ on:
       - 'pom.xml'
       - 'src/**'
 
-
 jobs:
   autodeploy:
     runs-on: ubuntu-latest
@@ -27,12 +26,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: graalvm/setup-graalvm@v1
-        with:
-          version: 'latest'
-          java-version: '17'
-          components: 'native-image'
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
@@ -43,8 +36,6 @@ jobs:
 
       - name: login to docker
         run: echo "${{ secrets.CR_PAT }}" | docker login ghcr.io -u sudobarre --password-stdin
-
-
 
       - name: Install flyctl via https://github.com/superfly/flyctl-actions
         uses: superfly/flyctl-actions/setup-flyctl@master
@@ -59,44 +50,27 @@ jobs:
       - name: Connect to fly.io DB via fly proxy
         run: flyctl proxy 5432 -a blogpost-backend-db &
 
-    # COMPILE INTO NATIVE IMAGE
-      - name: Build native image
-        env:
-          DB_HOST: localhost
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_USERNAME: ${{ secrets.DB_USERNAME }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DB_PORT: ${{ secrets.DB_PORT }}
-          JWT_EXPIRATION: ${{ secrets.JWT_EXPIRATION }}
-          JWT_REFRESH_EXPIRATION: ${{ secrets.JWT_REFRESH_EXPIRATION }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
-          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
-          MAIL_HOST: ${{ secrets.MAIL_HOST }}
-        run: mvn clean -Pnative native:compile -DDB_HOST=${DB_HOST} -DDB_NAME=${DB_NAME} -DDB_USERNAME=${DB_USERNAME} -DDB_PASSWORD=${DB_PASSWORD} -DDB_PORT=${DB_PORT} -DJWT_EXPIRATION=${JWT_EXPIRATION} -DJWT_REFRESH_EXPIRATION=${JWT_REFRESH_EXPIRATION} -DJWT_SECRET=${JWT_SECRET} -DMAIL_USERNAME=${MAIL_USERNAME} -DMAIL_PASSWORD=${MAIL_PASSWORD} -DMAIL_HOST=${MAIL_HOST} -Dmaven.compiler.release=17
-
-
-
-      # BUILD NATIVE IMAGE USING DOCKER BUILD
       - name: Build and push Docker image to Github Container Registry
         uses: docker/build-push-action@v4
         with:
-            context: ./
-            push: true
-            tags: ghcr.io/sudobarre/blogpost-backend:latest
-            build-args: |
-              DB_HOST=localhost
-              DB_NAME=${{ secrets.DB_NAME }}
-              DB_USERNAME=${{ secrets.DB_USERNAME }}
-              DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-              DB_PORT=${{ secrets.DB_PORT }}
-              JWT_EXPIRATION=${{ secrets.JWT_EXPIRATION }}
-              JWT_REFRESH_EXPIRATION=${{ secrets.JWT_REFRESH_EXPIRATION }}
-              JWT_SECRET=${{ secrets.JWT_SECRET }}
-              MAIL_USERNAME=${{ secrets.MAIL_USERNAME }}
-              MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}
-              MAIL_HOST=${{ secrets.MAIL_HOST }}
+          context: ./
+          push: true
+          tags: ghcr.io/sudobarre/blogpost-backend:latest
+          build-args: |
+            DB_HOST=$DB_HOST
+            DB_NAME=$DB_NAME
+            DB_USERNAME=$DB_USERNAME
+            DB_PASSWORD=$DB_PASSWORD
+            DB_PORT=$DB_PORT
+            JWT_EXPIRATION=$JWT_EXPIRATION
+            JWT_REFRESH_EXPIRATION=$JWT_REFRESH_EXPIRATION
+            JWT_SECRET=$JWT_SECRET
+            MAIL_USERNAME=$MAIL_USERNAME
+            MAIL_PASSWORD=$MAIL_PASSWORD
+            MAIL_HOST=$MAIL_HOST
+      
+      
 
-
-      - name: Deploy app to fly.io
-        run: flyctl deploy --image ghcr.io/sudobarre/blogpost-backend
+      #- name: Deploy app to fly.io
+      #- name: Deploy app to koyeb
+      #  run: flyctl deploy --image ghcr.io/sudobarre/blogpost-backend
