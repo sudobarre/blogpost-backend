@@ -30,7 +30,7 @@ The backend for my interactive Blogpost to polish my skills in FullStack develop
 
 ## 🏁 Getting Started <a name = "getting_started"></a>
 <p>These instructions will get you a copy of the project up and running on your local machine for development purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.</p>
-You can clone this repo and run it as you would normally, or pull it from Github Container Registry with the command ```docker pull ghcr.io/sudobarre/blogpost-backend:latest```.
+You can clone this repo and run it as you would normally, or pull it from Github Container Registry with the command `docker pull ghcr.io/sudobarre/blogpost-backend:latest`.
 
 
 To build the project, you can either do ```mvn clean install```, or if you want to generate a native image, ```mvn clean -Pnative native:compile```. Remember to pass along the env variables as well.
